@@ -1,3 +1,0 @@
-library(ElemStatLearn)
-?marketing
-sdf
