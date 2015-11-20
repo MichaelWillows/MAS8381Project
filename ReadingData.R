@@ -2,6 +2,7 @@ library(ElemStatLearn)
 ?marketing
 str(marketing)
 
+##change data
 marketing$Sex = factor(marketing$Sex)
 marketing$Marital = factor(marketing$Marital)
 marketing$Edu = factor(marketing$Edu)
