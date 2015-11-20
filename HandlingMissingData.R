@@ -2,6 +2,12 @@ library(ElemStatLearn)
 data("marketing")
 ?marketing
 
+# Note that we don't want to replace any NA values which
+# occur in the "Income" column because this is what we are
+# trying to predict. Luckily, there are no NA's here:
+sum(is.na(marketing[,1]))
+# ... is zero.
+
 #####################
 ## Option 1: Remove missing data: 
 #####################
@@ -39,7 +45,7 @@ Mode <- function(x) {
 ## Calculating the column modes:
 
 # colModes = numeric(14)
-# for ( i in 1:14) {
+# for ( i in 2:14) {
 #   colModes[i] = Mode(na.omit(marketing)[,i])
 # }
 # colModes
@@ -47,13 +53,13 @@ Mode <- function(x) {
 
 # ## Replacing all NA's as needed:
 
-# for ( i in 1:14){
+# for ( i in 2:14){
 #   marketing[,i][is.na(marketing[,i])] = colModes[i]
 # }
 
 ## The above two loops can be compacted to one:
 NA_to_mode = function(m){
-  for ( i in 1:14) {
+  for ( i in 2:14) {
     m[,i][is.na(m[,i])] = Mode(na.omit(m)[,i])
   }
   return(m)
@@ -70,5 +76,4 @@ marketing = NA_to_mode(marketing)
 
 head(marketing)
 # Looks like it worked.
-
 
