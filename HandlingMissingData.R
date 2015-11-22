@@ -78,3 +78,42 @@ head(marketing)
 # Looks like it worked.
 
 
+#########################
+## Fitting the other predictors to 
+## impute missing values:
+#########################
+
+# install.packages("mi")
+install.packages("mice")
+data("marketing")
+
+# We will be fitting a model so we change 
+# predictors to factor types:
+
+marketing$Sex = factor(marketing$Sex)
+marketing$Marital = factor(marketing$Marital)
+marketing$Edu = factor(marketing$Edu)
+marketing$Occupation = factor(marketing$Occupation)
+marketing$Lived = factor(marketing$Lived)
+marketing$Dual_Income = factor(marketing$Dual_Income)
+marketing$Status = factor(marketing$Status)
+marketing$Home_Type = factor(marketing$Home_Type)
+marketing$Ethnic = factor(marketing$Ethnic)
+marketing$Language = factor(marketing$Language)
+
+# This package called "mice" does everything.
+# I don't understand it fully but it uses different
+# methods for each predictor depending on the data 
+# type of each column as well as how many levels there are.
+
+method = c("", "", "lda", "", "lda", "lda", "lda", "", "pmm", "", "lda", "lda", "lda", "lda")
+require(mice)
+
+# Impute missing values:
+result = (mice(marketing, m =3, me = method))
+
+# Update our data set with the, now, completed one.
+marketing = complete(result,1)
+
+# Check all NA's have gone:
+sum(is.na(marketing))
