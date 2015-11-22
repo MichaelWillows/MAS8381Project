@@ -117,3 +117,26 @@ marketing = complete(result,1)
 
 # Check all NA's have gone:
 sum(is.na(marketing))
+
+
+
+#####################
+## plots of missing data. 
+## Might be useful later??
+#####################
+
+install.packages("ggplot2")
+library(ggplot2)
+data(marketing)
+
+prop_miss = numeric(14)
+h = nrow(marketing)
+
+for (i in 1:14){
+  prop_miss[i] = sum(is.na(marketing[,i]))/h
+}
+
+qplot(colnames(marketing), prop_miss)
+
+## It might be worth noting that 10% of the data for "Lived" 
+## has to be imputed/filled-in.
