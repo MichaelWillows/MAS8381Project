@@ -66,7 +66,6 @@ NA_to_mode = function(m){
 }
 
 ## Make sure this has worked:
-data(marketing)
 Mode(marketing[,14])
 head(marketing)
 # So we hope the NA Language entry in row 1
@@ -85,21 +84,7 @@ head(marketing)
 
 # install.packages("mi")
 install.packages("mice")
-data("marketing")
 
-# We will be fitting a model so we change 
-# predictors to factor types:
-
-marketing$Sex = factor(marketing$Sex)
-marketing$Marital = factor(marketing$Marital)
-marketing$Edu = factor(marketing$Edu)
-marketing$Occupation = factor(marketing$Occupation)
-marketing$Lived = factor(marketing$Lived)
-marketing$Dual_Income = factor(marketing$Dual_Income)
-marketing$Status = factor(marketing$Status)
-marketing$Home_Type = factor(marketing$Home_Type)
-marketing$Ethnic = factor(marketing$Ethnic)
-marketing$Language = factor(marketing$Language)
 
 # This package called "mice" does everything.
 # I don't understand it fully but it uses different
