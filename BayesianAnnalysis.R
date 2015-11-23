@@ -1,4 +1,4 @@
-#Finding the item we are model, y, and on what, x.
+#Finding the item we are going to model, y, and on what, x.
 y = marketing$Income
 x = model.matrix(Income ~ ., data = marketing)
 
@@ -23,7 +23,7 @@ tau~dgamma(1,0.001)
 }
 "
 model = jags.model(textConnection(modelstring), data = data, inits = init)
-update(model, n.iter = 100)
+update(model, n.iter = 1000)
 output = coda.samples(model = model, variable.names = c("beta", "tau"), n.iter = 1000, thin = 1)
 summary(output)
 plot(output)
@@ -49,8 +49,8 @@ pind ~ dbeta(2,8)
 }
 "
 model = jags.model(textConnection(modelstring), data = data, inits = init)
-update(model, n.iter = 10)
+update(model, n.iter = 100)
 output = coda.samples(model = model, variable.names = c("beta", "ind", "tau", "taub", "pind"),
-                      n.iter = 100, thin = 1)
+                      n.iter = 1000, thin = 1)
 summary(output)
 plot(output)
