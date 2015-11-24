@@ -1,0 +1,65 @@
+\documentclass{article}
+\usepackage{listings, verbatim}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{amsmath,amsfonts,graphicx,comment,typearea,amsthm}
+\usepackage{xcomment,psfrag,enumerate,scrpage2,xspace,hyperref,rotating,float}
+\begin{document}
+
+\title{MAS8381: Marketing Data Project}
+\author{Michael Dunne-Willows:\\
+Antonia Kontaratou:\\
+Hayley Moore: 110331287}
+\maketitle
+
+\section{Converting the Variables}
+We started our analysis by deciding whether a variable should be converted into a factor. We decided that if the variable was categorical, only had a small number of values and was unordered then to convert the variable to a factor. Table~\ref{variables} shows the variables an whether they are used as a factor or not.
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Variable} &\textbf{Used as}\\
+\hline
+Income       &Integer  \\
+Sex          &Factor with 2 levels \\
+Marital      &Factor with 5 levels \\
+Age          &Integer  \\
+Edu          &Factor with 6 levels\\
+Occupation   &Factor with 9 levels\\
+Lived        &Factor with 5 levels\\
+Dual\_Income &Factor with 3 levels\\
+Household    &Integer  \\
+Householdu18 &Integer  \\
+Status       &Factor with 3 levels \\
+Home\_Type   &Factor with 5 levels \\
+Ethnic       &Factor with 8 levels \\
+Language     &Factor with 3 levels \\
+\hline
+\end{tabular}
+\caption{variables}
+\label{variables}
+\end{table}
+\section{handling missing data}
+\section{Frequ}
+\section{Bayesian}
+We start the Bayesian analysis by modelling the saturated model with the missing data handled by just simply omitting it, later on we use the mice method mentioned earlier to handle the missing values. We have chosen to use a vague prior on each of our parameters, $\beta_i$, and for the precision, $\tau$. The model string  for this is 
+\begin{verbatim}
+modelstring = "
+model {
+for (i in 1:n) {
+mean[i] =  inprod(X[i,],beta)
+y[i]~dnorm(mean[i],tau)
+}
+for (j in 1:p) {
+beta[j]~dnorm(0,0.001)
+}
+tau~dgamma(1,0.001)
+}
+"
+\end{verbatim}
+
+
+
+
+
+\end{document}

@@ -7,7 +7,7 @@ n = length(y)
 p = ncol(x)
 
 require(rjags)
-#saturated mode
+#saturated model
 data = list(y = y, X = x, n = n, p = p)
 init = list(tau = 1, beta = rep(0, p))
 modelstring = "
@@ -24,7 +24,7 @@ tau~dgamma(1,0.001)
 "
 model = jags.model(textConnection(modelstring), data = data, inits = init)
 update(model, n.iter = 1000)
-output = coda.samples(model = model, variable.names = c("beta", "tau"), n.iter = 1000, thin = 1)
+output = coda.samples(model = model, variable.names = c("beta", "tau"), n.iter = 10000, thin = 1)
 summary(output)
 plot(output)
 
@@ -49,9 +49,9 @@ pind ~ dbeta(2,8)
 }
 "
 model = jags.model(textConnection(modelstring), data = data, inits = init)
-update(model, n.iter = 100)
+update(model, n.iter = 1000)
 output = coda.samples(model = model, variable.names = c("beta", "ind", "tau", "taub", "pind"),
-                      n.iter = 2000, thin = 5)
+                      n.iter = 5000, thin = 5)
 summary(output)
 plot(output)
 autocorr.plot(output)
