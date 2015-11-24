@@ -1,7 +1,7 @@
 library(ElemStatLearn)
 library(leaps)
 library(glmnet)
-
+ 
 ##### Best Subset Selection #####
 # Subset selection, we have 13 variables as predictors
 regfit=regsubsets(Income~., marketing, nvmax=20)
