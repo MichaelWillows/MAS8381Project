@@ -136,7 +136,22 @@ for (i in 1:14){
   prop_miss[i] = sum(is.na(marketing[,i]))/h
 }
 
-qplot(colnames(marketing), prop_miss)
+x = colnames(marketing)
+y = prop_miss
 
-## It might be worth noting that 10% of the data for "Lived" 
+props = data.frame(x, y)
+
+g = ggplot(data = props, aes(x, y))
+g + geom_point(size = 5) + xlab("Predictor name.") + ylab("Proportion of missing data.") +
+  theme(axis.text.x = element_text(color="black", 
+                                   size=14, angle=45),
+        axis.text.y = element_text(color="black", 
+                                   size=14, angle=45)) + 
+  theme(axis.text=element_text(size=12),
+        axis.title=element_text(size=14,face="bold")) +
+  labs(title = "Proportion of missing data for each predictor") +
+  theme(plot.title = element_text(size = rel(2)))
+
+## It will be worth noting that 10% of the data for "Lived" 
 ## has to be imputed/filled-in.
+
