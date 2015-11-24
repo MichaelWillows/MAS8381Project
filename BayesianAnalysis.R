@@ -29,7 +29,7 @@ summary(output)
 plot(output)
 
 
-#Variable selection wioth random effects and prior inclusion 
+#Variable selection with random effects and prior inclusion 
 data = list(y = y, X = x, n = nrow(x), p = ncol(x))
 init = list(tau = 1, taub = 1, pind = 0.5, betaT = rep(0, ncol(x)), ind = rep(0, ncol(x)))
 modelstring = "
@@ -51,6 +51,8 @@ pind ~ dbeta(2,8)
 model = jags.model(textConnection(modelstring), data = data, inits = init)
 update(model, n.iter = 100)
 output = coda.samples(model = model, variable.names = c("beta", "ind", "tau", "taub", "pind"),
-                      n.iter = 1000, thin = 1)
+                      n.iter = 2000, thin = 5)
 summary(output)
 plot(output)
+autocorr.plot(output)
+
