@@ -1,26 +1,10 @@
 library(ElemStatLearn)
 library(leaps)
 library(glmnet)
-?marketing
-str(marketing)
 
-marketing=na.omit(marketing)
-##change data
-marketing$Sex = factor(marketing$Sex)
-marketing$Marital = factor(marketing$Marital)
-marketing$Edu = factor(marketing$Edu)
-marketing$Occupation = factor(marketing$Occupation)
-marketing$Lived = factor(marketing$Lived)
-marketing$Dual_Income = factor(marketing$Dual_Income)
-marketing$Status = factor(marketing$Status)
-marketing$Home_Type = factor(marketing$Home_Type)
-marketing$Ethnic = factor(marketing$Ethnic)
-marketing$Language = factor(marketing$Language)
-str(marketing)
-dim(marketing)
 ##### Best Subset Selection #####
 # Subset selection, we have 13 variables as predictors
-regfit=regsubsets(Income~., marketing, nvmax=13)
+regfit=regsubsets(Income~., marketing, nvmax=20)
 summary(regfit)
 #We get the up to 13 variable model. Each model is formed by the predictors that participated in fitting the regression
 # and gave the lowest RSS.
@@ -49,7 +33,7 @@ points(j, reg.summary$cp[i],col = "red",cex=2, pch=20)
 plot(reg.summary$bic, xlab="Number of variables", ylab="BIC", type ="l")
 k=which.min(reg.summary$bic)
 points(k, reg.summary$bic[k],col = "red",cex=2, pch=20)
-
+par(mfrow=c(1,1))
 #We present BIC here as a selection of criteria but they all adjust the training error so we are going to use
 #the cross validation that estimates the test error directly
 #If we use BIC as the selection criteria, it is suggested that we use a subset of 11 predictors that are believed to be related to the response as BIC reaches its lowest value when it uses three predictors.
@@ -67,7 +51,7 @@ predict.regsubsets = function(object, newdata, id, ...) {
 }
 
 k = 10
-p = ncol(marketing) - 1
+p = 42
 folds = sample(rep(1:k, length = nrow(marketing)))
 cv.errors = matrix(NA, k, p)
 for (i in 1:k) {
@@ -81,8 +65,8 @@ rmse.cv = sqrt(apply(cv.errors, 2, mean))
 plot(rmse.cv, pch = 19, type = "b")
 
 vmax=which.min(rmse.cv) 
-reg.best=regsubsets(Income~.,data = marketing,nvmax=vmax)
-coef(best.fit,vmax)
+reg.best=regsubsets(Income~.,data = marketing,nvmax=13)
+coef(best.fit,13)
 
 
 ######
@@ -108,8 +92,28 @@ bestlam
 pred=predict(lasso.mod,model.matrix(Income~.,data=marketing[test,])[,-1],s=bestlam)
 mean((y[test]-pred)^2)
 #Estimate and print the coefficients
-lasso.coef=predict(cvout ,type="coefficients",s=bestlam)[1:14,]
+lasso.coef=predict(cvout ,type="coefficients",s=bestlam)[1:43,]
 lasso.coef
 
+#lasso Darren
+y=marketing[,1]
+grid=10^seq(10,-5,length=100)
+xmat=model.matrix(Income~.,data=marketing)[,-1]
+cor(xmat)
+mod=glmnet(xmat,y,alpha=1,lambda=grid) 
+plot(mod)
+plot(cvout)
+bestlam=0.3
+lasso.coef=predict(mod,type="coefficients",s=bestlam)
+lasso.coef
 
-
+#Rigde Darren
+# Ridge
+mod=glmnet(xmat,y,alpha=0,lambda=grid)
+plot(mod)
+cvout=cv.glmnet(xmat,y,alpha=0)
+plot(cvout)
+bestlam=cvout$lambda.min
+bestlam
+ridge.coef=predict(mod,type="coefficients",s=bestlam)
+ridge.coef
