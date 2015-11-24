@@ -28,7 +28,4 @@ labels= c("Sex2", "Marital2", "Marital3", "Marital4", "Marital5", "Age",
 
 image((abs(cor(xmat[,-1])) > 0.5) + 0 , axes = F ,main = "Image plot highlighting highly correlated factors (abs()>0.5)")
 mtext(text = c(labels), side = 2, line=0 ,cex = 0.9, at = seq(0, 1, 1/43), las = 1)
-mtext(text = c(labels),side = 1, line=0 ,cex = 1, at = seq(0, 1, 1/43), las = 2,)
-
-
-
+mtext(text = c(labels),side = 1, line=0 ,cex = 1, at = seq(0, 1, 1/43), las = 2)
