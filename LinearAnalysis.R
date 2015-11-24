@@ -111,3 +111,5 @@ mean((y[test]-pred)^2)
 lasso.coef=predict(cvout ,type="coefficients",s=bestlam)[1:14,]
 lasso.coef
 
+
+
