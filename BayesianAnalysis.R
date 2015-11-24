@@ -51,7 +51,7 @@ pind ~ dbeta(2,8)
 model = jags.model(textConnection(modelstring), data = data, inits = init)
 update(model, n.iter = 100)
 output = coda.samples(model = model, variable.names = c("beta", "ind", "tau", "taub", "pind"),
-                      n.iter = 10000, thin = 10)
+                      n.iter = 2000, thin = 5)
 summary(output)
 plot(output)
 autocorr.plot(output)
