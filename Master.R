@@ -1,4 +1,4 @@
 source("ReadingData.R")
-source("removingMissingData.R")
+source("HandlingMissingData.R")
 source("LinearAnalysis")
 source("BayesianAnnalysis.R")

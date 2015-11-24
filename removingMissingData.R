@@ -1,1 +1,0 @@
-marketing = na.omit(marketing)
