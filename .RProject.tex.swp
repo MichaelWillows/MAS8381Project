@@ -20,16 +20,16 @@ We started our analysis by deciding whether a variable should be converted into 
 \hline
 \textbf{Variable} &\textbf{Used as}\\
 \hline
-Income       &Integer  \\
+Income       &Continuous variable  \\
 Sex          &Factor with 2 levels \\
 Marital      &Factor with 5 levels \\
-Age          &Integer  \\
+Age          &Continuous variable  \\
 Edu          &Factor with 6 levels\\
 Occupation   &Factor with 9 levels\\
 Lived        &Factor with 5 levels\\
 Dual\_Income &Factor with 3 levels\\
-Household    &Integer  \\
-Householdu18 &Integer  \\
+Household    &Continuous variable  \\
+Householdu18 &Continuous variable  \\
 Status       &Factor with 3 levels \\
 Home\_Type   &Factor with 5 levels \\
 Ethnic       &Factor with 8 levels \\
@@ -49,9 +49,9 @@ Householdu18 : PERSONS IN HOUSEHOLD UNDER 18
 \end{verbatim}
 we can see that each gap is equivalent to one more under 18 person living in the house.
 
-\subsection{Michael's brilliant idea section}
 
 \section{handling missing data}
+\label{handling}
 \section{Frequ}
 \section{Bayesian}
 \subsection{Saturated Model}
@@ -77,8 +77,27 @@ The MCMC had a burn in of 1000 iterations and a run of 10,000 iterations. From t
 \caption{Trace and density plots for the parameters $\beta_1, \beta_2, \beta_3$ and $\beta_4$.}
 \label{saturated_beta1-4}
 \end{figure}
-
-
+\subsection{Variable Selection Model}
+The model can be improved upon by using a model that does variable selection and random effects with prior inclusion. This means that the model will no longer have all the variables which will give us a model which is less likely to over fit and will have less bias. The random effects means that the variable value is now changed with a variable probability where the probability comes from a normal distribution. The model string we used to incorporate this is
+\begin{verbatim}
+modelstring = "
+model{
+for(i in 1:n){
+mean[i] = inprod(X[i,], beta)
+y[i] ~ dnorm(mean[i],tau)
+}
+for (j in 1:p) {
+ind[j] ~ dbern(pind)
+betaT[j] ~ dnorm(0,taub)
+beta[j] = ind[j]*betaT[j]
+}
+tau ~ dgamma(1, 0.001)
+taub ~ dgamma(1, 0.001)
+pind ~ dbeta(2,8)
+}
+"
+\end{verbatim}
+we used this model to the data where the missing values had been replaced using the MICE method mention in Section~\ref{handling}
 
 
 \end{document}
