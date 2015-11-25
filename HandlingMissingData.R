@@ -123,7 +123,6 @@ impute_mice = function(data){
   return (data)
 }
 
-
 #####################
 ## plots of missing data. 
 ## Might be useful later??
@@ -157,4 +156,3 @@ g + geom_point(size = 5) + xlab("Predictor name.") + ylab("Proportion of missing
 
 ## It will be worth noting that 10% of the data for "Lived" 
 ## has to be imputed/filled-in.
-
