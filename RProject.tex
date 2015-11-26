@@ -7,7 +7,7 @@
 \begin{document}
 
 \title{MAS8381: Marketing Data Project}
-\author{Michael Dunne-Willows:\\
+\author{Michael Dunne-Willows: 120065714\\
 Antonia Kontaratou:\\
 Hayley Moore: 110331287}
 \maketitle
@@ -117,6 +117,8 @@ One value catches our attention- the predictor `Lived' has required $10\%$ of it
 \section{Frequ}
 \section{Bayesian Analysis}
 We used RJAGS in our Bayesian analysis. RJAGS is a way of calling JAGS from with in \textsf{R}. JAGS is a program for the statistical analysis of Bayesian models by Markov Chain Monte Carlo, MCMC. MCMC is a way of sampling form a distribution by using a Markov chain with its equilibrium distribution the same as the distribution we wish to sample from. A MCMC has two stages a burn in stage, where the Markov chain hasn't reached equilibrium, and a converged stange, where the chain has reached equilibrium.
+\\\\
+When using \textsf{R} it calls $\beta_0$ beta[1].
 \subsection{Saturated Model}
 We start the Bayesian analysis by modelling the saturated model with the missing data handled by just simply omitting it, later on we use the mice method mentioned earlier to handle the missing values. We have chosen to use a vague prior on each of our parameters, $\beta_i$, and for the precision, $\tau$. The model string  for this is 
 \begin{verbatim}
@@ -160,24 +162,23 @@ pind ~ dbeta(2,8)
 }
 "
 \end{verbatim}
-\begin{figure}[h!]
+\begin{figure}[H]
 \centering
 \includegraphics[width = 0.9\textwidth]{micePlot.pdf}
 \caption{Trace and density plots for $\beta_0, \beta_1, \beta_2$ and $\beta_3$}
 \label{micePlot}
 \end{figure}
-We used this model to the data where the missing values had been replaced using the MICE method mention in Section~\ref{handling}. Since this is a better approach to modelling the data we ran the MCMC for a longer period of time. The burn is period is 1000 iterations and the run is 5000 iterations. As you can see in Figure~\ref{micePlot} the trace plot is now not as condensed because the JAGS model has included variable selection so some iterations give a value of 0. Figure~\ref{notIncluded} shows that the model has chosen for $\beta_20, \beta_21, \beta_22$ and $\beta_23$ to not be included in the model. This is shown by the trace plot regularly being 0 and in the density plots. The density plot for $\beta_21$ and $\beta_22$ are represented by histograms are there are so few values which are not approximately 0.
-\begin{figure}[h!]
+We used this model to the data where the missing values had been replaced using the MICE method mention in Section~\ref{handling}. Since this is a better approach to modelling the data we ran the MCMC for a longer period of time. The burn is period is 1000 iterations and the run is 5000 iterations. As you can see in Figure~\ref{micePlot} the trace plot is now not as condensed because the JAGS model has included variable selection so some iterations give a value of 0. Figure~\ref{notIncluded} shows that the model has chosen for $\beta_{20}, \beta_{21}, \beta_{22}$ and $\beta_{23}$ to not be included in the model. This is shown by the trace plot regularly being 0 and in the density plots. The density plot for $\beta_21$ and $\beta_22$ are represented by histograms are there are so few values which are not approximately 0.
+\begin{figure}[H]
 \centering
 \includegraphics[width = 0.9\textwidth]{notIncludedBetas.pdf}
 \caption{}
 \label{notIncluded}
 \end{figure}
-\\\\
-The variable selection process has included some of the predictors. The \textsf{ind} vector can be though of as the probability that the corresponding predictor is in the model. Below we have the \textsf{R} output showing the \textsf{ind} values. We can see here that \textsf{ind[21] - ind[28]}, for example, have some uncertainty whether there respective variables should be in the model. The value for \textsf{ind[28]} has the lowest mean value and therefore the variable it corresponds to, \textsf{Householdu18}, is least likely to be in the model. 
+\noindent The variable selection process has included some of the predictors. The \textsf{ind} vector can be though of as the probability that the corresponding predictor is in the model. Below we have the \textsf{R} output showing the \textsf{ind} values. We can see here that \textsf{ind[21] - ind[28]}, for example, have some uncertainty whether there respective variables should be in the model. The value for \textsf{ind[28]} has the lowest mean value and therefore the variable it corresponds to, \textsf{Householdu18}, is least likely to be in the model. 
 \\\\
 It is worth noticing that the variables \textsf{ind[21] - ind[28]}, representing Lived[2] - Lived[5], are potentially as low as they are because $10\%$ of the data corresponding to this, which is how long a person had lived in their house, was initially missing and therefore had be created during the MICE method.
-
+{\small
 \begin{verbatim}
               Mean       SD  Naive SE Time-series SE
 ind[1]    1.000000 0.000000 0.0000000      0.0000000
@@ -223,6 +224,7 @@ ind[40]   0.254000 0.435515 0.0137722      0.0405610
 ind[41]   0.221000 0.415128 0.0131275      0.0309514
 ind[42]   0.988000 0.108940 0.0034450      0.0074873
 ind[43]   0.167000 0.373162 0.0118004      0.0123641
-\end{verbatim}
+\end{verbatim}}
+
 
 \end{document}
