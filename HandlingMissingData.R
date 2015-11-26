@@ -129,6 +129,7 @@ impute_mice = function(data){
 #####################
 
 # install.packages("ggplot2")
+
 library(ggplot2)
 
 data(marketing)
