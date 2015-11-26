@@ -77,7 +77,7 @@ The MCMC had a burn in of 1000 iterations and a run of 10,000 iterations. From t
 \caption{Trace and density plots for the parameters $\beta_1, \beta_2, \beta_3$ and $\beta_4$.}
 \label{saturated_beta1-4}
 \end{figure}
-\subsection{Variable Selection Model}
+\subsection{Model with Variable Selection}
 The model can be improved upon by using a model that does variable selection and random effects with prior inclusion. This means that the model will no longer have all the variables which will give us a model which is less likely to over fit and will have less bias. The random effects means that the variable value is now changed with a variable probability where the probability comes from a normal distribution. The model string we used to incorporate this is
 \begin{verbatim}
 modelstring = "
@@ -97,7 +97,7 @@ pind ~ dbeta(2,8)
 }
 "
 \end{verbatim}
-we used this model to the data where the missing values had been replaced using the MICE method mention in Section~\ref{handling}
+We used this model to the data where the missing values had been replaced using the MICE method mention in Section~\ref{handling}. Since this is a better approach to modelling the data we ran the MCMC for a longer period of time. The burn is period is 1000 iterations and the run is 5000 iterations. As you can see in Figure~\ref{micePlot} the trace plot is now much more condensed. 
 
 
 \end{document}
