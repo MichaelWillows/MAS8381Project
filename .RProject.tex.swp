@@ -53,7 +53,8 @@ we can see that each gap is equivalent to one more under 18 person living in the
 \section{handling missing data}
 \label{handling}
 \section{Frequ}
-\section{Bayesian}
+\section{Bayesian Analysis}
+We used RJAGS in our Bayesian analysis. RJAGS is a way of calling JAGS from with in \textsf{R}. JAGS is a program for the statistical analysis of Bayesian models by Markov Chain Monte Carlo, MCMC. MCMC is a way of sampling form a distribution by using a Markov chain with its equilibrium distribution the same as the distribution we wish to sample from. A MCMC has two stages a burn in stage, where the Markov chain hasn't reached equilibrium, and a converged stange, where the chain has reached equilibrium.
 \subsection{Saturated Model}
 We start the Bayesian analysis by modelling the saturated model with the missing data handled by just simply omitting it, later on we use the mice method mentioned earlier to handle the missing values. We have chosen to use a vague prior on each of our parameters, $\beta_i$, and for the precision, $\tau$. The model string  for this is 
 \begin{verbatim}
@@ -71,13 +72,13 @@ tau~dgamma(1,0.001)
 "
 \end{verbatim}
 The MCMC had a burn in of 1000 iterations and a run of 10,000 iterations. From the plots of $\beta_1$ to $\beta_4$ we can see that the distribution converged. This is shown in Figure~\ref{saturated_beta1-4} by the "furry caterpillar" effect we see.
-\begin{figure}[H]
+\begin{figure}[h!]
 \centering
 \includegraphics[width = 0.9\textwidth]{saturatedOutput/beta1-4.pdf}
-\caption{Trace and density plots for the parameters $\beta_1, \beta_2, \beta_3$ and $\beta_4$.}
+\caption{Trace and density plots for the parameters $\beta_0, \beta_1, \beta_2$ and $\beta_3$.}
 \label{saturated_beta1-4}
 \end{figure}
-\subsection{Variable Selection Model}
+\subsection{Model with Variable Selection}
 The model can be improved upon by using a model that does variable selection and random effects with prior inclusion. This means that the model will no longer have all the variables which will give us a model which is less likely to over fit and will have less bias. The random effects means that the variable value is now changed with a variable probability where the probability comes from a normal distribution. The model string we used to incorporate this is
 \begin{verbatim}
 modelstring = "
@@ -97,7 +98,69 @@ pind ~ dbeta(2,8)
 }
 "
 \end{verbatim}
-we used this model to the data where the missing values had been replaced using the MICE method mention in Section~\ref{handling}
+\begin{figure}[h!]
+\centering
+\includegraphics[width = 0.9\textwidth]{micePlot.pdf}
+\caption{Trace and density plots for $\beta_0, \beta_1, \beta_2$ and $\beta_3$}
+\label{micePlot}
+\end{figure}
+We used this model to the data where the missing values had been replaced using the MICE method mention in Section~\ref{handling}. Since this is a better approach to modelling the data we ran the MCMC for a longer period of time. The burn is period is 1000 iterations and the run is 5000 iterations. As you can see in Figure~\ref{micePlot} the trace plot is now not as condensed because the JAGS model has included variable selection so some iterations give a value of 0. Figure~\ref{notIncluded} shows that the model has chosen for $\beta_20, \beta_21, \beta_22$ and $\beta_23$ to not be included in the model. This is shown by the trace plot regularly being 0 and in the density plots. The density plot for $\beta_21$ and $\beta_22$ are represented by histograms are there are so few values which are not approximately 0.
+\begin{figure}[h!]
+\centering
+\includegraphics[width = 0.9\textwidth]{notIncludedBetas.pdf}
+\caption{}
+\label{notIncluded}
+\end{figure}
+\\\\
+The variable selection process has included some of the predictors. The \textsf{ind} vector can be though of as the probability that the corresponding predictor is in the model. Below we have the \textsf{R} output showing the \textsf{ind} values. We can see here that \textsf{ind[21] - ind[28]}, for example, have some uncertainty whether there respective variables should be in the model. The value for \textsf{ind[28]} has the lowest mean value and therefore the variable it corresponds to, \textsf{Householdu18}, is least likely to be in the model. 
+\\\\
+It is worth noticing that the variables \textsf{ind[21] - ind[28]}, representing Lived[2] - Lived[5], are potentially as low as they are because $10\%$ of the data corresponding to this, which is how long a person had lived in their house, was initially missing and therefore had be created during the MICE method.
 
+\begin{verbatim}
+              Mean       SD  Naive SE Time-series SE
+ind[1]    1.000000 0.000000 0.0000000      0.0000000
+ind[2]    1.000000 0.000000 0.0000000      0.0000000
+ind[3]    0.994000 0.077266 0.0024434      0.0030262
+ind[4]    1.000000 0.000000 0.0000000      0.0000000
+ind[5]    1.000000 0.000000 0.0000000      0.0000000
+ind[6]    1.000000 0.000000 0.0000000      0.0000000
+ind[7]    1.000000 0.000000 0.0000000      0.0000000
+ind[8]    0.990000 0.099549 0.0031480      0.0068224
+ind[9]    1.000000 0.000000 0.0000000      0.0000000
+ind[10]   1.000000 0.000000 0.0000000      0.0000000
+ind[11]   1.000000 0.000000 0.0000000      0.0000000
+ind[12]   1.000000 0.000000 0.0000000      0.0000000
+ind[13]   1.000000 0.000000 0.0000000      0.0000000
+ind[14]   1.000000 0.000000 0.0000000      0.0000000
+ind[15]   1.000000 0.000000 0.0000000      0.0000000
+ind[16]   1.000000 0.000000 0.0000000      0.0000000
+ind[17]   1.000000 0.000000 0.0000000      0.0000000
+ind[18]   1.000000 0.000000 0.0000000      0.0000000
+ind[19]   1.000000 0.000000 0.0000000      0.0000000
+ind[20]   1.000000 0.000000 0.0000000      0.0000000
+ind[21]   0.339000 0.473607 0.0149768      0.0333299
+ind[22]   0.254000 0.435515 0.0137722      0.0292305
+ind[23]   0.148000 0.355278 0.0112349      0.0134316
+ind[24]   0.379000 0.485381 0.0153491      0.0457288
+ind[25]   0.972000 0.165055 0.0052195      0.0234233
+ind[26]   0.259000 0.438305 0.0138604      0.0341916
+ind[27]   0.564000 0.496135 0.0156892      0.1392019
+ind[28]   0.166000 0.372267 0.0117721      0.0408814
+ind[29]   1.000000 0.000000 0.0000000      0.0000000
+ind[30]   1.000000 0.000000 0.0000000      0.0000000
+ind[31]   0.660000 0.473946 0.0149875      0.0249466
+ind[32]   1.000000 0.000000 0.0000000      0.0000000
+ind[33]   1.000000 0.000000 0.0000000      0.0000000
+ind[34]   1.000000 0.000000 0.0000000      0.0000000
+ind[35]   0.297000 0.457165 0.0144568      0.0389590
+ind[36]   0.184000 0.387678 0.0122595      0.0354303
+ind[37]   0.857000 0.350248 0.0110758      0.0114945
+ind[38]   0.698000 0.459355 0.0145261      0.0402731
+ind[39]   0.318000 0.465932 0.0147341      0.0258775
+ind[40]   0.254000 0.435515 0.0137722      0.0405610
+ind[41]   0.221000 0.415128 0.0131275      0.0309514
+ind[42]   0.988000 0.108940 0.0034450      0.0074873
+ind[43]   0.167000 0.373162 0.0118004      0.0123641
+\end{verbatim}
 
 \end{document}
