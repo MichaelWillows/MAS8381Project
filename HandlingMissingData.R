@@ -13,7 +13,7 @@ sum(is.na(marketing[,1]))
 
 
 
-sum(is.na(marketing))
+sum(is.na(marketing))/dim(marketing)[1]
 # We lose 2694 observations by simply removing all
 # entries which contain atleast one missing value.
 
@@ -152,7 +152,7 @@ g + geom_point(size = 5) + xlab("Predictor name.") + ylab("Proportion of missing
         axis.text.y = element_text(color="black", size=14, angle=45)) +
   labs(title = "Proportion of missing data for each predictor") +
   theme(axis.text=element_text(size=12),
-        axis.title=element_text(size=14,face="bold"),
+        axis.title=element_text(size=20,face="bold"),
         plot.title = element_text(size = rel(2)))
 
 ## It will be worth noting that 10% of the data for "Lived" 
